@@ -17,7 +17,7 @@ function xdiff_string_diff(string $old_data, string $new_data, int $context = 3,
 function xdiff_string_merge3(string $old_data, string $new_data1, string $new_data2, string $error = "") : mixed;
 
 <<__Native>>
-function xdiff_string_patch(string $str, string $patch, int flags = XDIFF_PATCH_NORMAL, string error = "") : mixed;
+function xdiff_string_patch(string $str, string $patch, int $flags = XDIFF_PATCH_NORMAL, string $error = "") : mixed;
 
 /**
  * xdiff_string_rabdiff() - http://php.net/function.xdiff_string_rabdiff

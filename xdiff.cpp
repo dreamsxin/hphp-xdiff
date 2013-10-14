@@ -58,8 +58,8 @@ void* php_malloc(void*, unsigned int size) {
 }
 
 void php_free(void*, void* ptr) {
-  assert(ptr);
-  free(ptr);
+  if (ptr)
+    free(ptr);
 }
 
 void* php_realloc(void*, void* ptr, unsigned int size) {
@@ -67,11 +67,11 @@ void* php_realloc(void*, void* ptr, unsigned int size) {
   return realloc(ptr, size);
 }
 
-Variant HHVM_FUNCTION(xdiff_string_bdiff_size, const String& patch) {
+static Variant HHVM_FUNCTION(xdiff_string_bdiff_size, const String& patch) {
   return xdl_bdiff_tgsize(XdiffMmFile(patch).get());
 }
 
-Variant HHVM_FUNCTION(xdiff_string_bdiff, const String& old_data,
+static Variant HHVM_FUNCTION(xdiff_string_bdiff, const String& old_data,
                                           const String& new_data) {
   XdiffMmFile xold(old_data), xnew(new_data);
   XdiffOutput o;
@@ -83,7 +83,7 @@ Variant HHVM_FUNCTION(xdiff_string_bdiff, const String& old_data,
   return o.output();
 }
 
-Variant HHVM_FUNCTION(xdiff_string_bpatch, const String& str,
+static Variant HHVM_FUNCTION(xdiff_string_bpatch, const String& str,
                                            const String& patch) {
   XdiffMmFile xstr(str), xpatch(patch);
   XdiffOutput o;
@@ -94,7 +94,7 @@ Variant HHVM_FUNCTION(xdiff_string_bpatch, const String& str,
   return o.output();
 }
 
-Variant HHVM_FUNCTION(xdiff_string_diff, const String& old_data,
+static Variant HHVM_FUNCTION(xdiff_string_diff, const String& old_data,
                                          const String& new_data,
                                          int context /* =3 */,
                                          bool minimal /* = false */) {
@@ -110,7 +110,7 @@ Variant HHVM_FUNCTION(xdiff_string_diff, const String& old_data,
   return o.output();
 }
 
-Variant HHVM_FUNCTION(xdiff_string_merge3, const String& old_data,
+static Variant HHVM_FUNCTION(xdiff_string_merge3, const String& old_data,
                                            const String& new_data1,
                                            const String& new_data2,
                                            String& error /* = null_string */) {
@@ -126,7 +126,7 @@ Variant HHVM_FUNCTION(xdiff_string_merge3, const String& old_data,
   return o.output();
 }
 
-Variant HHVM_FUNCTION(xdiff_string_patch, const String& str,
+static Variant HHVM_FUNCTION(xdiff_string_patch, const String& str,
                                           const String& patch,
                                           int64_t flags /* = XDIFF_PATCH_NORMAL */,
                                           String& error /* = null_string */) {
@@ -142,7 +142,7 @@ Variant HHVM_FUNCTION(xdiff_string_patch, const String& str,
   return o.output();
 }
 
-Variant HHVM_FUNCTION(xdiff_string_rabdiff, const String& old_data,
+static Variant HHVM_FUNCTION(xdiff_string_rabdiff, const String& old_data,
                                             const String& new_data) {
   XdiffMmFile xold(old_data), xnew(new_data);
   XdiffOutput o;
