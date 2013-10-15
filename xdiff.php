@@ -11,7 +11,7 @@ function xdiff_string_biff(string $old_data, string $new_data) : mixed;
 function xdiff_string_bpatch(string $str, string $patch) : mixed;
 
 <<__Native>>
-function xdiff_string_diff(string $old_data, string $new_data, int $context = 3, bool $minimal) : mixed;
+function xdiff_string_diff(string $old_data, string $new_data, ?int $context = 3, ?bool $minimal) : mixed;
 
 <<__Native>>
 function xdiff_string_merge3(string $old_data, string $new_data1, string $new_data2, string $error = "") : mixed;

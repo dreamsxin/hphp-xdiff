@@ -157,6 +157,7 @@ static class XdiffExtension : public Extension {
 public:
   XdiffExtension() : Extension("xdiff") { }
   virtual void moduleInit() {
+    HHVM_FE(xdiff_string_bdiff_size);
     HHVM_FE(xdiff_string_bpatch);
     HHVM_NAMED_FE(xdiff_string_diff_binary, HHVM_FN(xdiff_string_bdiff)); // alias
     HHVM_FE(xdiff_string_diff);
