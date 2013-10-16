@@ -5,13 +5,13 @@
 function xdiff_string_bdiff_size(string $patch) : mixed;
 
 <<__Native>>
-function xdiff_string_biff(string $old_data, string $new_data) : mixed;
+function xdiff_string_bdiff(string $old_data, string $new_data) : mixed;
 
 <<__Native>>
 function xdiff_string_bpatch(string $str, string $patch) : mixed;
 
 <<__Native>>
-function xdiff_string_diff(string $old_data, string $new_data, ?int $context = 3, ?bool $minimal) : mixed;
+function xdiff_string_diff(string $old_data, string $new_data, int $context = 3, bool $minimal = FALSE) : mixed;
 
 <<__Native>>
 function xdiff_string_merge3(string $old_data, string $new_data1, string $new_data2, string $error = "") : mixed;
@@ -58,7 +58,7 @@ function xdiff_file_diff_binary(string $old_file, string $new_file, string $dest
   return xdiff_file_bdiff($old_file, $new_file, $dest);
 }
 
-function xdiff_file_diff(string $old_file, string $new_file, string $dest, int $context /* = 3 */, bool $minimal /* = FALSE */) : bool {
+function xdiff_file_diff(string $old_file, string $new_file, string $dest, int $context = 3, bool $minimal = FALSE) : bool {
   $diff = xdiff_string_diff(file_get_contents($old_file),
                             file_get_contents($new_file),
                             $context, $minimal);
@@ -66,7 +66,7 @@ function xdiff_file_diff(string $old_file, string $new_file, string $dest, int $
   if ($diff === FALSE)
     return FALSE;
 
-  $ret = put_file_contents($dest, $diff);
+  $ret = file_put_contents($dest, $diff);
 
   return $ret >= 0;
 }
@@ -92,7 +92,7 @@ function xdiff_file_patch_binary(string $file, string $patch, string $dest): boo
 }
 
 function xdiff_file_patch(string $file, string $patch, string $dest,
-                          ?int $flags = DIFF_PATCH_NORMAL): mixed {
+                          int $flags = DIFF_PATCH_NORMAL): mixed {
 
   $patched = xdiff_string_patch(file_get_contents($file), $patch, $flags, $error);
 

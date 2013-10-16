@@ -96,14 +96,15 @@ static Variant HHVM_FUNCTION(xdiff_string_bpatch, const String& str,
 
 static Variant HHVM_FUNCTION(xdiff_string_diff, const String& old_data,
                                          const String& new_data,
-                                         int context /* =3 */,
+                                         int context /* = 3 */,
                                          bool minimal /* = false */) {
   XdiffMmFile xold(old_data), xnew(new_data);
   XdiffOutput o;
   xpparam_t params;
-  xdemitconf_t conf = { abs(context) };
+  xdemitconf_t conf;
 
   params.flags = minimal ? XDF_NEED_MINIMAL : 0;
+  conf.ctxlen = abs(context);
   if (xdl_diff(xold.get(), xnew.get(), &params, &conf, o.get()) < 0)
     return false;
 
@@ -159,6 +160,7 @@ public:
   virtual void moduleInit() {
     HHVM_FE(xdiff_string_bdiff_size);
     HHVM_FE(xdiff_string_bpatch);
+    HHVM_FE(xdiff_string_bdiff);
     HHVM_NAMED_FE(xdiff_string_diff_binary, HHVM_FN(xdiff_string_bdiff)); // alias
     HHVM_FE(xdiff_string_diff);
     HHVM_FE(xdiff_string_merge3);
