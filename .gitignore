@@ -4,3 +4,6 @@ CMakeFiles/
 Makefile
 cmake_install.cmake
 xdiff.so
+*.php.diff
+*.php.out
+*.php.repo

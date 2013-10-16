@@ -168,6 +168,10 @@ public:
     HHVM_FE(xdiff_string_patch);
     HHVM_FE(xdiff_string_rabdiff);
 
+#define CONST(name, value) Native::registerConstant<KindOfInt64>(makeStaticString("XDIFF_" #name), (value))
+    CONST(PATCH_NORMAL, XDL_PATCH_NORMAL);
+    CONST(PATCH_REVERSE, XDL_PATCH_REVERSE);
+
     memallocator_t malt = {nullptr, php_malloc, php_free, php_realloc};
     xdl_set_allocator(&malt);
 

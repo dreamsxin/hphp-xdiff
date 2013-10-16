@@ -1,6 +1,5 @@
 <?hh
 
-
 <<__Native>>
 function xdiff_string_bdiff_size(string $patch) : mixed;
 
@@ -8,7 +7,13 @@ function xdiff_string_bdiff_size(string $patch) : mixed;
 function xdiff_string_bdiff(string $old_data, string $new_data) : mixed;
 
 <<__Native>>
+function xdiff_string_diff_binary(string $old_data, string $new_data) : mixed;
+
+<<__Native>>
 function xdiff_string_bpatch(string $str, string $patch) : mixed;
+
+<<__Native>>
+function xdiff_string_patch_binary(string $str, string $patch) : mixed;
 
 <<__Native>>
 function xdiff_string_diff(string $old_data, string $new_data, int $context = 3, bool $minimal = FALSE) : mixed;
@@ -46,7 +51,8 @@ function xdiff_file_bdiff(string $old_file, string $new_file, string $dest) : bo
 }
 
 function xdiff_file_bpatch(string $file, string $patch, string $dest) : bool {
-  $patched = xdiff_string_bpatch(file_get_contents($file), $patch);
+  $patched = xdiff_string_bpatch(file_get_contents($file),
+                                 file_get_contents($patch));
   if ($patched === FALSE)
     return FALSE;
 
@@ -54,7 +60,7 @@ function xdiff_file_bpatch(string $file, string $patch, string $dest) : bool {
   return $ret >= 0;
 }
 
-function xdiff_file_diff_binary(string $old_file, string $new_file, string $dest):bool {
+function xdiff_file_diff_binary(string $old_file, string $new_file, string $dest) : bool {
   return xdiff_file_bdiff($old_file, $new_file, $dest);
 }
 
@@ -72,6 +78,7 @@ function xdiff_file_diff(string $old_file, string $new_file, string $dest, int $
 }
 
 function xdiff_file_merge3(string $old_file, string $new_file1, string $new_file2, string $dest) : mixed {
+  $error = "";
   $merged = xdiff_string_merge3(file_get_contents($old_file),
                                 file_get_contents($new_file1),
                                 file_get_contents($new_file2),
@@ -79,7 +86,7 @@ function xdiff_file_merge3(string $old_file, string $new_file1, string $new_file
   if ($merged === FALSE)
     return FALSE;
 
-  $ret = put_file_contents($dest, $merged);
+  $ret = file_put_contents($dest, $merged);
 
   if (!empty($error))
     return $error;
@@ -92,14 +99,15 @@ function xdiff_file_patch_binary(string $file, string $patch, string $dest): boo
 }
 
 function xdiff_file_patch(string $file, string $patch, string $dest,
-                          int $flags = DIFF_PATCH_NORMAL): mixed {
-
-  $patched = xdiff_string_patch(file_get_contents($file), $patch, $flags, $error);
+                          int $flags = XDIFF_PATCH_NORMAL): mixed {
+  $error = "";
+  $patched = xdiff_string_patch(file_get_contents($file), file_get_contents($patch),
+                                $flags, $error);
 
   if ($patched === FALSE)
     return FALSE;
 
-  $ret = put_file_contents($dest, $patched);
+  $ret = file_put_contents($dest, $patched);
 
   if (!empty($error))
     return $error;
